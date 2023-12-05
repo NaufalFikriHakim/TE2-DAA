@@ -114,12 +114,10 @@ class DP {
     public static void calculate(String filePath, String sortFunc, int size){
         try{
             int[] arr = readFile(filePath, size);
-            long memoryBefore;
-            long startTime;
+            double startTime;
 
             if(sortFunc.equals("DP")){
-                memoryBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                startTime = System.currentTimeMillis();
+                startTime = System.nanoTime();
                 
                 if(findPartition(arr, size)){
                     System.out.println("Can be divided into two subsets of equal sum");
@@ -128,22 +126,19 @@ class DP {
                 }
 
             }else{
-
-            int[] values = { /* your values here */ };
             int startIndex = 0;
-            int totalValue = Arrays.stream(values).sum();
+            int totalValue = Arrays.stream(arr).sum();
             int unassignedValue = totalValue;
-            boolean[] testAssignment = new boolean[values.length];
+            boolean[] testAssignment = new boolean[arr.length];
             int testValue = 0;
-            boolean[] bestAssignment = new boolean[values.length];
+            boolean[] bestAssignment = new boolean[arr.length];
             int bestErr = Integer.MAX_VALUE;
     
             PartitionData partitionData = new PartitionData(bestAssignment, bestErr);
 
-            memoryBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            startTime = System.currentTimeMillis();
+            startTime = System.nanoTime();
     
-            partitionValuesFromIndex(values, startIndex, totalValue, unassignedValue, testAssignment, testValue, partitionData);
+            partitionValuesFromIndex(arr, startIndex, totalValue, unassignedValue, testAssignment, testValue, partitionData);
     
             // Access updated values after the method call
             bestAssignment = partitionData.bestAssignment;
@@ -151,11 +146,8 @@ class DP {
 
             }
 
-            long endTime = System.currentTimeMillis();
-            long memoryAfter = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            long memoryUsed = memoryAfter - memoryBefore;
-            System.out.println("Estimated memory used: " + memoryUsed + " bytes");
-            long duration = (endTime - startTime);
+            double endTime = System.nanoTime();
+            double duration = (endTime - startTime) / 1000000;
             System.out.println("Time taken to find partition in " + filePath + " using " + sortFunc + " is " + duration + " ms");
             System.out.println();
         }catch(Exception e){
